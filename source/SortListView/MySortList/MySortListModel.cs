@@ -1,5 +1,5 @@
 ﻿
-namespace SortListView
+namespace SortListView.MySortList
 {
     public class MySortListModel
     {

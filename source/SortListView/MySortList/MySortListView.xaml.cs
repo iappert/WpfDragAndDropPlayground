@@ -1,5 +1,5 @@
 
-namespace SortListView
+namespace SortListView.MySortList
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace SortListView
 
     public partial class MySortListView
     {
-        private MySortListViewModel viewModel;
+        private IMySortListViewModel viewModel;
 
         private Point startPoint;
 
@@ -19,7 +19,6 @@ namespace SortListView
         public MySortListView()
         {
             this.InitializeComponent();
-            this.Initialize(new MySortListViewModel());
         }
 
         public static MySortListViewModel SampleData
@@ -42,32 +41,26 @@ namespace SortListView
             }
         }
 
-        public void Initialize(MySortListViewModel viewModel)
+        public void Initialize(IMySortListViewModel viewModel)
         {
-            this.DataContext = viewModel;
             this.viewModel = viewModel;
         }
 
-        public void LoadData()
+        private static T FindAnchestor<T>(DependencyObject current)
+            where T : DependencyObject
         {
-            this.viewModel.LoadData();
-        }
-
-        public void MoveUp()
-        {
-            if (this.SortedListView.SelectedIndex != -1)
+            do
             {
-                this.viewModel.MoveUp(this.SortedListView.SelectedIndex);
-            }
+                if (current is T)
+                {
+                    return (T)current;
+                }
 
-        }
-
-        public void MoveDown()
-        {
-            if (this.SortedListView.SelectedIndex != -1)
-            {
-                this.viewModel.MoveDown(this.SortedListView.SelectedIndex);
+                current = VisualTreeHelper.GetParent(current);
             }
+            while (current != null);
+
+            return null;
         }
 
         private void SortedListView_OnDragEnter(object sender, DragEventArgs e)
@@ -103,7 +96,6 @@ namespace SortListView
             }
 
             this.isDragging = false;
-
         }
 
         private void SortedListView_OnPreviewMouseMove(object sender, MouseEventArgs e)
@@ -142,22 +134,6 @@ namespace SortListView
             {
                 this.isDragging = true;
             }
-        }
-
-        private static T FindAnchestor<T>(DependencyObject current)
-            where T : DependencyObject
-        {
-            do
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
         }
     }
 }

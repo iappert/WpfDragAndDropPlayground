@@ -1,23 +1,19 @@
 ﻿<Window x:Class="SortListView.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sortListView="clr-namespace:SortListView"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SortListView"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sortListView="clr-namespace:SortListView.MySortList"
         Title="MainWindow"
         Width="525"
-        Height="350">
-  <StackPanel>
-    <Button x:Name="Load"
-            Click="Load_OnClick"
-            Content="Load" />
-
-    <Button x:Name="MoveUp"
-            Click="MoveUp_OnClick"
-            Content="Move up" />
-
-    <Button x:Name="MoveDown"
-            Click="MoveDown_OnClick"
-            Content="Move Down" />
-
-    <sortListView:MySortListView x:Name="MySortListView" />
-  </StackPanel>
+        Height="350"
+        d:DataContext="{d:DesignInstance local:MainViewModel}"
+        mc:Ignorable="d">
+    <StackPanel>
+        <Button Command="{Binding LoadDataCommand}" Content="Load" />
+        <Button Command="{Binding MoveUpCommand}" Content="Move up" />
+        <Button Command="{Binding MoveDownCommand}" Content="Move Down" />
+        <sortListView:MySortListView x:Name="MySortListView" DataContext="{Binding MySortListViewModel}" />
+    </StackPanel>
 </Window>

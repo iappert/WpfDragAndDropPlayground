@@ -1,25 +1,38 @@
 ﻿
-namespace SortListView
+namespace SortListView.MySortList
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Input;
 
-    public class MySortListViewModel : INotifyPropertyChanged
+    using SortListView.Commands;
+
+    public class MySortListViewModel : INotifyPropertyChanged, IMySortListViewModel
     {
+        private int selectedIndex;
+
+        private bool canMove;
+
         public MySortListViewModel()
         {
             var blah = new ObservableCollection<MySortListModel>();
             blah.CollectionChanged += this.SortedDataOnCollectionChanged;
 
             this.Model = blah;
+            this.selectedIndex = -1;
+
+            this.DragAndDropCommand = new RelayCommand(() => this.ExecuteDragAndDropCommand());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<MySortListModel> Model { get; private set; }
+
+        public ICommand DragAndDropCommand { get; private set; }
 
         public IEnumerable<MySortListModel> SortedData
         {
@@ -30,6 +43,32 @@ namespace SortListView
         }
 
         public MySortListModel SelectedItem { get; set; }
+
+        public int SelectedIndex
+        {
+            get
+            {
+                return this.selectedIndex;
+            }
+
+            set
+            {
+                if (value != this.selectedIndex)
+                {
+                    this.selectedIndex = value;
+                    this.OnPropertyChanged();
+                    this.OnPropertyChanged("CanMove");
+                }
+            }
+        }
+
+        public bool CanMove
+        {
+            get
+            {
+                return this.selectedIndex >= 0;
+            }
+        }
 
         public void LoadData()
         {
@@ -53,10 +92,10 @@ namespace SortListView
             });
         }
 
-        public void MoveUp(int selectedIndex)
+        public void MoveUp()
         {
-            var current = this.Model.First(x => x.SequenceNr == selectedIndex);
-            var previous = this.Model.FirstOrDefault(x => x.SequenceNr == selectedIndex - 1);
+            var current = this.Model.First(x => x.SequenceNr == this.SelectedIndex);
+            var previous = this.Model.FirstOrDefault(x => x.SequenceNr == this.SelectedIndex - 1);
             if (previous != null)
             {
                 current.SequenceNr--;
@@ -69,10 +108,10 @@ namespace SortListView
             }
         }
 
-        public void MoveDown(int selectedIndex)
+        public void MoveDown()
         {
-            var current = this.Model.First(x => x.SequenceNr == selectedIndex);
-            var following = this.Model.FirstOrDefault(x => x.SequenceNr == selectedIndex + 1);
+            var current = this.Model.First(x => x.SequenceNr == this.SelectedIndex);
+            var following = this.Model.FirstOrDefault(x => x.SequenceNr == this.SelectedIndex + 1);
             if (following != null)
             {
                 current.SequenceNr++;
@@ -123,12 +162,24 @@ namespace SortListView
             }
         }
 
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         private void SortedDataOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
             if (this.PropertyChanged != null)
             {
                 this.PropertyChanged(this, new PropertyChangedEventArgs("SortedData"));
             }
+        }
+
+        private void ExecuteDragAndDropCommand()
+        {
         }
     }
 }

@@ -53,7 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MySortListView.xaml">
+    <Compile Include="MainViewModel.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Page Include="MySortList\MySortListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -65,8 +67,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MySortListModel.cs" />
-    <Compile Include="MySortListView.xaml.cs">
+    <Compile Include="MySortList\IMySortListViewModel.cs" />
+    <Compile Include="MySortList\MySortListModel.cs" />
+    <Compile Include="MySortList\MySortListView.xaml.cs">
       <DependentUpon>MySortListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
@@ -75,7 +78,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MySortListViewModel.cs" />
+    <Compile Include="MySortList\MySortListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,10 +1,10 @@
-<UserControl x:Class="SortListView.MySortListView"
+<UserControl x:Class="SortListView.MySortList.MySortListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sortListView="clr-namespace:SortListView"
-             d:DataContext="{x:Static sortListView:MySortListView.SampleData}"
+             xmlns:mySortList="clr-namespace:SortListView.MySortList"
+             d:DataContext="{x:Static mySortList:MySortListView.SampleData}"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
@@ -21,9 +21,10 @@
               DragEnter="SortedListView_OnDragEnter"
               Drop="SortedListView_OnDrop"
               ItemContainerStyle="{StaticResource listItemStyle}"
-              ItemsSource="{Binding Path=SortedData}"
+              ItemsSource="{Binding SortedData}"
               PreviewMouseLeftButtonDown="SortedListView_OnPreviewMouseLeftButtonDown"
-              PreviewMouseMove="SortedListView_OnPreviewMouseMove">
+              PreviewMouseMove="SortedListView_OnPreviewMouseMove"
+              SelectedIndex="{Binding SelectedIndex}">
       <ListView.View>
         <GridView>
           <GridViewColumn Width="auto"
